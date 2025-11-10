@@ -9,6 +9,7 @@ import ProjectChatbot from "@/components/project-chatbot"
 import { useSound } from "@/components/sound-provider"
 import SpotlightCard from "@/components/SpotlightCard"
 import DescriptionCarousel from "@/components/DescriptionCarousel"
+import Spline from '@splinetool/react-spline'
 
 interface Project {
   id: number
@@ -22,12 +23,14 @@ interface Project {
   hasCode: boolean
   hasDemo: boolean
   date: string // Format: YYYY-MM
+  isFavorite?: boolean // Mark as favorite/featured project
 }
 
 export default function ProjectsPage() {
   const [projects, setProjects] = useState<Project[]>([])
   const [loading, setLoading] = useState(true)
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
+  const [showFavoriteOnly, setShowFavoriteOnly] = useState(false)
   const [isChatbotMinimized, setIsChatbotMinimized] = useState(false)
   const { playSound } = useSound()
 
@@ -199,10 +202,10 @@ export default function ProjectsPage() {
           tags: ["TypeScript", "Anthropic Claude", "Search Engine", "LDM", "Deep Search API"],
           category: "hackathon",
           codeUrl: "#",
-          demoUrl: "https://eyed-search.vercel.app",
+          demoUrl: "#",
           hasCode: false,
-          hasDemo: true,
-          date: "2025-10",
+          hasDemo: false,
+          date: "2025-11",
         },
         {
           id: 12,
@@ -260,6 +263,7 @@ export default function ProjectsPage() {
           hasCode: true,
           hasDemo: false,
           date: "2025-09",
+          isFavorite: true,
         },
         {
           id: 15,
@@ -279,6 +283,7 @@ export default function ProjectsPage() {
           hasCode: true,
           hasDemo: false,
           date: "2025-09",
+          isFavorite: true,
         },
         {
           id: 16,
@@ -298,9 +303,10 @@ export default function ProjectsPage() {
           hasCode: false,
           hasDemo: true,
           date: "2025-08",
+          isFavorite: true,
         },
         {
-          id: 19,
+          id: 17,
           title: "HealthOdyssey",
           description: "Built a real-time dashboard that tracks French meat-product recalls and environmental indicators.",
           tags: ["AI", "ML", "Web Dashboard", "AutoML", "Flask", "Hackathon"],
@@ -312,7 +318,7 @@ export default function ProjectsPage() {
           date: "2025-04",
         },
         {
-          id: 17,
+          id: 18,
           title: "🥇 EmoHunter – 1st Place Winner ($50K Prize)",
           description:
             "1st place winner among 90+ projects at Pond Hackathon, securing $50K funding and the Future Startup Prize. Developed an iOS Apple Watch app with a proactive AI voice agent for mental health support.",
@@ -329,6 +335,29 @@ export default function ProjectsPage() {
           hasCode: false,
           hasDemo: true,
           date: "2025-08",
+          isFavorite: true,
+        },
+        {
+          id: 19,
+          title: "LyricMind – Fine-tuned Qwen2.5-7B Lyric Generation System",
+          description:
+            "AI lyric-writing model via QLoRA and RLAIF-DPO, fine-tuned from Qwen2.5-7B to generate high-quality Chinese lyrics.",
+          descriptionPages: [
+            "🎵 Developed an AI lyric-writing model via QLoRA and RLAIF-DPO, fine-tuned from Qwen2.5-7B to generate high-quality Chinese lyrics with natural rhyme, emotion alignment, and theme consistency.",
+            "📊 Collected and processed 30K+ songs (~10-12M tokens) for SFT training; leveraged Nebius A100 40GB GPU (~12h total, ~$36) for efficient single-card training.",
+            "🎯 Designed a hybrid Reward Function combining AI feedback, Rhyme Scorer, and Emotion Analyzer for automated preference scoring; integrated into DPO fine-tuning to bias the model toward musically pleasing outputs.",
+            "🔄 Implemented a self-improving post-training stage with Self-Consistency and Self-Reward mechanisms—model auto-generates, evaluates, and re-trains on its best samples without new datasets.",
+            "📈 Achieved +24% rhyme naturalness and +19% emotion coherence compared to the SFT baseline; lyrics show improved flow, sentiment stability, and stylistic diversity (pop, rap, classical).",
+            "🚀 Delivered full training pipeline on LLaMA Factory, including SFT, DPO, and self-evolution scripts, compatible with both API and local fine-tuning workflows."
+          ],
+          tags: ["Qwen2.5-7B", "QLoRA", "RLAIF-DPO", "LLaMA Factory", "Nebius", "Python"],
+          category: "side",
+          codeUrl: "#",
+          demoUrl: "#",
+          hasCode: false,
+          hasDemo: false,
+          date: "2025-10",
+          isFavorite: true,
         }
       ])
       setLoading(false)
@@ -339,6 +368,15 @@ export default function ProjectsPage() {
   const handleCategoryClick = (category: string | null) => {
     playSound("click")
     setSelectedCategory(category)
+    // Reset favorite filter when clicking ALL or changing category
+    if (category === null || category !== selectedCategory) {
+      setShowFavoriteOnly(false)
+    }
+  }
+
+  const handleFavoriteClick = () => {
+    playSound("click")
+    setShowFavoriteOnly(!showFavoriteOnly)
   }
 
   const handleButtonClick = (e: React.MouseEvent, hasLink: boolean) => {
@@ -350,9 +388,15 @@ export default function ProjectsPage() {
     }
   }
 
-  const filteredProjects = selectedCategory 
-    ? projects.filter((p) => p.category === selectedCategory).sort((a, b) => b.date.localeCompare(a.date))
-    : projects.sort((a, b) => b.date.localeCompare(a.date))
+  const filteredProjects = projects
+    .filter((p) => {
+      // Filter by category if selected
+      const categoryMatch = selectedCategory ? p.category === selectedCategory : true
+      // Filter by favorite if enabled
+      const favoriteMatch = showFavoriteOnly ? p.isFavorite === true : true
+      return categoryMatch && favoriteMatch
+    })
+    .sort((a, b) => b.date.localeCompare(a.date))
 
   return (
     <>
@@ -362,10 +406,16 @@ export default function ProjectsPage() {
 
         <div className="category-tabs">
           <button
-            className={`category-tab ${selectedCategory === null ? "active" : ""}`}
+            className={`category-tab ${selectedCategory === null && !showFavoriteOnly ? "active" : ""}`}
             onClick={() => handleCategoryClick(null)}
           >
             ALL
+          </button>
+          <button
+            className={`category-tab ${showFavoriteOnly ? "active" : ""}`}
+            onClick={handleFavoriteClick}
+          >
+            ⭐ FAVORITE
           </button>
           <button
             className={`category-tab ${selectedCategory === "hackathon" ? "active" : ""}`}
@@ -414,9 +464,17 @@ export default function ProjectsPage() {
               const pages = [
                 // Page 1: Title + Tech Stack + Short Description
                 <div key="page-1" className="carousel-page">
-                  <h2 className="project-title">{project.title}</h2>
+                  <h2 className="project-title">
+                    {project.isFavorite && <span className="favorite-icon">⭐</span>}
+                    {project.title}
+                  </h2>
                   <div className="project-date">{project.date}</div>
                   <div className="project-tags">
+                    {project.isFavorite && (
+                      <span className="project-tag favorite-tag">
+                        FAVORITE
+                      </span>
+                    )}
                     {project.tags.map((tag, index) => (
                       <span key={index} className="project-tag">
                         {tag}
@@ -515,6 +573,18 @@ export default function ProjectsPage() {
       </div>
 
       <ProjectChatbot onMinimizeChange={setIsChatbotMinimized} />
+
+      <div style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        width: '100vw',
+        height: '100vh',
+        zIndex: -10,
+        pointerEvents: 'none'
+      }}>
+        <Spline scene="/computer.splinecode" />
+      </div>
 
       <FloatingNav />
     </>
