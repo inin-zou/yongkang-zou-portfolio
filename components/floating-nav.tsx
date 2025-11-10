@@ -4,6 +4,7 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { Home, FolderOpen, User, PenTool, Music, Mail, Github, Linkedin } from "lucide-react"
 import { useSound } from "./sound-provider"
+import GlassSurface from "./GlassSurface"
 
 export default function FloatingNav() {
   const pathname = usePathname()
@@ -37,20 +38,38 @@ export default function FloatingNav() {
   ]
 
   return (
-    <div className="floating-nav">
-      {navItems.map((item) => (
-        <Link
-          key={item.name}
-          href={item.path}
-          target={item.external ? "_blank" : undefined}
-          rel={item.external ? "noopener noreferrer" : undefined}
-          onClick={handleClick}
-          className={`nav-button ${item.color} ${pathname === item.path ? "active" : ""}`}
-          title={item.name}
-        >
-          {item.icon}
-        </Link>
-      ))}
+    <div className="floating-nav-wrapper">
+      <GlassSurface
+        width={400}
+        height={56}
+        borderRadius={30}
+        brightness={20}
+        opacity={0.8}
+        blur={15}
+        displace={8}
+        distortionScale={-150}
+        redOffset={5}
+        greenOffset={10}
+        blueOffset={15}
+        mixBlendMode="screen"
+        className="floating-nav-glass"
+      >
+        <div className="floating-nav-content">
+          {navItems.map((item) => (
+            <Link
+              key={item.name}
+              href={item.path}
+              target={item.external ? "_blank" : undefined}
+              rel={item.external ? "noopener noreferrer" : undefined}
+              onClick={handleClick}
+              className={`nav-button ${item.color} ${pathname === item.path ? "active" : ""}`}
+              title={item.name}
+            >
+              {item.icon}
+            </Link>
+          ))}
+        </div>
+      </GlassSurface>
     </div>
   )
 }

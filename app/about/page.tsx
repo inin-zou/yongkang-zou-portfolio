@@ -20,9 +20,10 @@ export default function AboutPage() {
     "Scala",
     "PySpark",
     "VBA",
-    "C#",
+    "Go",
+    "TypeScript",
     "JavaScript",
-    "HTML",
+    "C#",
     "bash",
   ]
 
@@ -37,7 +38,7 @@ export default function AboutPage() {
       subcategories: [
         {
           name: "Fine-Tuning",
-          skills: ["LoRA", "Prefix Tuning", "SFT"],
+          skills: ["LoRA/QLORA", "DPO"],
         },
         {
           name: "Model Optimization",
@@ -45,13 +46,13 @@ export default function AboutPage() {
         },
         {
           name: "Generative AI",
-          skills: ["Transformers", "GANs"],
+          skills: ["Transformers", "Diffusion Models"],
         },
       ],
     },
     {
       title: "⚡ LLM Frameworks",
-      skills: ["LangChain", "LangGraph", "LlamaIndex", "SmolAgent", "AutoGen", "gradio[mcp]"],
+      skills: ["LangChain", "LangGraph", "LlamaIndex", "SmolAgent", "AutoGen"],
     },
     {
       title: "📊 Data & Visualization",
@@ -72,7 +73,7 @@ export default function AboutPage() {
     },
     {
       title: "🗄️ Databases & Storage",
-      skills: ["ElasticSearch", "PostgreSQL", "MongoDB"],
+      skills: ["Qdrant","Weviate","Supabase","ElasticSearch", "PostgreSQL", "MongoDB"],
     },
     {
       title: "☁️ Cloud Platforms",
@@ -89,15 +90,15 @@ export default function AboutPage() {
     },
     {
       title: "🔧 DevOps",
-      skills: ["GitHub Actions", "Docker", "Kubernetes", "Jenkins"],
+      skills: ["GitHub Actions", "Docker", "Kubernetes"],
     },
     {
       title: "⚙️ Back-End",
-      skills: ["FastAPI", "Flask", ".NET"],
+      skills: ["Python", "JavaScript", "TypeScript", "Go"],
     },
     {
       title: "🎨 Front-End",
-      skills: ["Streamlit", "Gradio", "React.js", "AngularJS"],
+      skills: ["Next.js", "React.js", "TailwindCSS", "Vue.js", "Three.js"],
     },
   ]
 
@@ -172,8 +173,21 @@ export default function AboutPage() {
                 <div className="timeline-item">
                   <div className="timeline-content">
                     <h3 className="item-title">AI Engineer</h3>
+                    <p className="item-company">Mozart AI, Paris</p>
+                    <p className="item-date">Oct 2025 - Present</p>
+                    <ul className="bullet-list">
+                      <li>Developing an end-to-end agentic workflow for AI music video creation</li>
+                      <li>Implementing front-end audio interaction design</li>
+                      <li>Contributing to Music AI development</li>
+                    </ul>
+                  </div>
+                </div>
+
+                <div className="timeline-item">
+                  <div className="timeline-content">
+                    <h3 className="item-title">AI Engineer</h3>
                     <p className="item-company">Misogi Labs, Paris</p>
-                    <p className="item-date">May 2025 - Present</p>
+                    <p className="item-date">May 2025 - Sept 2025</p>
                     <ul className="bullet-list">
                       <li>Developed multi-agent molecule screening system using PaperQA and LangGraph</li>
                       <li>Integrated biomedical document retrieval with experimental evidence support</li>

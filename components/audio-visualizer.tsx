@@ -1,6 +1,6 @@
-"use client"
+'use client'
 
-import { useEffect, useRef } from "react"
+import { useEffect, useRef } from 'react'
 
 interface AudioVisualizerProps {
   isPlaying?: boolean
@@ -8,103 +8,94 @@ interface AudioVisualizerProps {
   height?: number
 }
 
-export default function AudioVisualizer({ isPlaying = true, barCount = 64, height = 200 }: AudioVisualizerProps) {
+export function AudioVisualizer({ isPlaying = false, barCount = 64, height = 200 }: AudioVisualizerProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const animationRef = useRef<number>()
-  const audioDataRef = useRef<number[]>(new Array(barCount).fill(0))
+  const barsRef = useRef<number[]>([])
 
   useEffect(() => {
     const canvas = canvasRef.current
     if (!canvas) return
 
-    const ctx = canvas.getContext("2d")
+    const ctx = canvas.getContext('2d')
     if (!ctx) return
 
-    // Set canvas dimensions
-    const resizeCanvas = () => {
-      canvas.width = canvas.offsetWidth * window.devicePixelRatio
-      canvas.height = height * window.devicePixelRatio
-      ctx.scale(window.devicePixelRatio, window.devicePixelRatio)
+    // Initialize bars with random heights
+    if (barsRef.current.length === 0) {
+      barsRef.current = Array.from({ length: barCount }, () => Math.random() * 0.5 + 0.2)
     }
 
-    resizeCanvas()
+    const bars = barsRef.current
+    let phase = 0
 
-    const barWidth = canvas.offsetWidth / barCount
-    const colors = [
-      "#00ff00", // Terminal green
-      "#29adff", // Electric blue
-      "#00fff7", // Neon cyan
-      "#ff007f", // Hot magenta
-      "#fff700", // Bright yellow
-      "#ff004d", // Bright red
-    ]
+    const animate = (time: number) => {
+      const dpr = window.devicePixelRatio || 1
+      canvas.width = canvas.offsetWidth * dpr
+      canvas.height = canvas.offsetHeight * dpr
+      ctx.scale(dpr, dpr)
 
-    const animate = () => {
-      ctx.clearRect(0, 0, canvas.offsetWidth, height)
+      const width = canvas.offsetWidth
+      const canvasHeight = canvas.offsetHeight
+      const barWidth = width / barCount
 
-      // Generate random audio data if playing
-      if (isPlaying) {
-        audioDataRef.current = audioDataRef.current.map((_, i) => {
-          const baseFreq = Math.sin(Date.now() * 0.001 + i * 0.1) * 0.5 + 0.5
-          const randomVariation = Math.random() * 0.3
-          return Math.min(1, baseFreq + randomVariation)
-        })
-      }
+      ctx.clearRect(0, 0, width, canvasHeight)
 
-      // Draw bars
-      audioDataRef.current.forEach((value, i) => {
-        const barHeight = value * height * 0.8
+      // Update and draw bars
+      bars.forEach((bar, i) => {
+        if (isPlaying) {
+          // Simulate audio reactivity with sine waves
+          const wave1 = Math.sin(phase + i * 0.1) * 0.3
+          const wave2 = Math.sin(phase * 1.5 + i * 0.15) * 0.2
+          const target = Math.abs(wave1 + wave2) + 0.2
+          bars[i] += (target - bars[i]) * 0.1
+        } else {
+          // Gradually decrease to minimum height when not playing
+          bars[i] += (0.2 - bars[i]) * 0.05
+        }
+
+        const barHeight = bars[i] * canvasHeight
         const x = i * barWidth
-        const y = height - barHeight
+        const y = canvasHeight - barHeight
 
         // Create gradient for each bar
-        const gradient = ctx.createLinearGradient(0, y, 0, height)
-        const colorIndex = Math.floor((i / barCount) * colors.length)
-        const color = colors[colorIndex]
-
-        gradient.addColorStop(0, color)
-        gradient.addColorStop(1, color + "40") // Add transparency
+        const gradient = ctx.createLinearGradient(x, y, x, canvasHeight)
+        gradient.addColorStop(0, '#00e5ff')
+        gradient.addColorStop(1, '#0066ff')
 
         ctx.fillStyle = gradient
-        ctx.fillRect(x, y, barWidth - 1, barHeight)
+        ctx.fillRect(x, y, barWidth - 2, barHeight)
 
         // Add glow effect
-        ctx.shadowColor = color
         ctx.shadowBlur = 10
-        ctx.fillRect(x, y, barWidth - 1, barHeight)
+        ctx.shadowColor = '#00e5ff'
+        ctx.fillRect(x, y, barWidth - 2, barHeight)
         ctx.shadowBlur = 0
       })
+
+      if (isPlaying) {
+        phase += 0.05
+      }
 
       animationRef.current = requestAnimationFrame(animate)
     }
 
     animate()
 
-    // Handle window resize
-    const handleResize = () => {
-      resizeCanvas()
-    }
-
-    window.addEventListener("resize", handleResize)
-
     return () => {
       if (animationRef.current) {
         cancelAnimationFrame(animationRef.current)
       }
-      window.removeEventListener("resize", handleResize)
     }
-  }, [isPlaying, barCount, height]) // Removed audioData from dependencies
+  }, [isPlaying, barCount])
 
   return (
-    <div className="audio-visualizer-container">
-      <canvas ref={canvasRef} className="audio-visualizer-canvas" style={{ height: `${height}px` }} />
-      <div className="visualizer-overlay">
-        <div className="frequency-labels">
-          <span>LOW</span>
-          <span>MID</span>
-          <span>HIGH</span>
-        </div>
-      </div>
-    </div>
+    <canvas
+      ref={canvasRef}
+      style={{
+        width: '100%',
+        height: `${height}px`,
+        display: 'block',
+      }}
+    />
   )
 }

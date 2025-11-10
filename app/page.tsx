@@ -2,15 +2,16 @@
 
 import { useState, useEffect, useRef } from "react"
 import { useRouter } from "next/navigation"
-import Image from "next/image"
+import dynamic from "next/dynamic"
 import FloatingNav from "@/components/floating-nav"
 import CyberpunkIntro from "@/components/cyberpunk-intro"
 import { useSound } from "@/components/sound-provider"
 
+import Spline from '@splinetool/react-spline'
+
 export default function Home() {
   const [selectedMenuItem, setSelectedMenuItem] = useState(0)
   const [showIntro, setShowIntro] = useState(true)
-  const [imageError, setImageError] = useState(false)
   const introSectionRef = useRef<HTMLDivElement>(null)
   const router = useRouter()
   const { playSound } = useSound()
@@ -25,19 +26,19 @@ export default function Home() {
   const menuItems = [
     { label: "START", action: () => scrollToIntro() },
     { label: "PROJECTS", action: () => router.push("/projects") },
-    { label: "ABOUT", action: () => router.push("/about") },
+    { label: "ABOUT ME", action: () => router.push("/about") },
     { label: "MUSIC", action: () => router.push("/music") },
     { label: "CONTACT", action: () => router.push("/contact") },
   ]
 
-  // Hide intro after 5 seconds or on any key press
+  // Hide intro after animation completes or on any key press
   useEffect(() => {
     const handleKeyPress = () => {
       setShowIntro(false)
       playSound("click")
     }
 
-    const timer = setTimeout(() => setShowIntro(false), 5000)
+    const timer = setTimeout(() => setShowIntro(false), 13500)
 
     window.addEventListener("keydown", handleKeyPress)
     window.addEventListener("click", handleKeyPress)
@@ -108,54 +109,24 @@ export default function Home() {
 
       {/* Personal Introduction Section */}
       <div className="intro-section" ref={introSectionRef}>
-        <div className="profile-frame">
-          {!imageError ? (
-            <Image
-              src="/images/profile_black.jpg"
-              alt="Yongkang Zou Profile"
-              width={300}
-              height={400}
-              className="profile-image"
-              onError={() => setImageError(true)}
-              priority
-            />
-          ) : (
-            <div
-              className="profile-placeholder"
-              style={{
-                width: "300px",
-                height: "400px",
-                background: "rgba(0, 255, 247, 0.1)",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                border: "2px solid var(--modern-accent)",
-              }}
-            >
-              <span style={{ color: "var(--modern-accent)", fontSize: "0.8rem", textAlign: "center" }}>
-                PROFILE IMAGE
-                <br />
-                LOADING...
-              </span>
-            </div>
-          )}
+        <div className="w-full h-[500px]">
+          <Spline scene="/digital_pass_scene.splinecode" />
         </div>
 
         <div className="intro-content">
           <h1 className="blinking-cursor">Hi, I'm Yongkang Zou</h1>
 
           <p className="terminal-prompt">
-            AI Engineer specializing in LLMs, RAG systems, and intelligent agent workflows.
+            AI Engineer based in Paris, <span className="artist">8x AI Hackathon winner</span>, specializing in LLMs, RAG systems, and Agentic AI.
           </p>
 
           <p className="terminal-prompt">
-            Currently at <span className="company">Misogi Labs</span>, previously at{" "}
+            Currently at <span className="company">Mozart AI</span>, previously at{" "}
             <span className="company">Société Générale</span>.
           </p>
 
           <p className="terminal-prompt">
-            Recent graduate from Université Paris Dauphine, with a focus on applied AI and scalable retrieval-augmented
-            systems.
+            Recent graduate from Université Paris Dauphine (2024), with a focus on applied AI and Multimodal AI use cases.
           </p>
 
           <p className="terminal-prompt">

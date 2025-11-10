@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import { ExternalLink, Music, Play } from "lucide-react"
 import FloatingNav from "@/components/floating-nav"
-import AudioVisualizer from "@/components/audio-visualizer"
+import { AudioVisualizer } from "@/components/audio-visualizer"
 import { useSound } from "@/components/sound-provider"
 import NetEaseMusicPlayer from "@/components/netease-music-player"
 
