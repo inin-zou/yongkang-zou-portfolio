@@ -49,6 +49,11 @@ npm start
 │   ├── pixel-stars.tsx          # 像素星空背景
 │   ├── audio-visualizer.tsx     # 音频可视化组件
 │   ├── netease-music-player.tsx # 网易云音乐播放器
+│   ├── project-chatbot.tsx      # 项目聊天机器人组件
+│   ├── three-scene.tsx          # Three.js 3D 场景组件
+│   ├── GlassSurface.jsx         # 玻璃质感表面组件
+│   ├── LetterGlitch.jsx         # 字母故障效果组件
+│   ├── SpotlightCard.jsx        # 聚光灯卡片组件
 │   ├── sound-provider.tsx       # 音效上下文提供者
 │   ├── sound-toggle.tsx         # 音效开关组件
 │   ├── theme-provider.tsx       # 主题提供者
@@ -89,6 +94,12 @@ npm start
 
 ### 项目页面 (`/projects`)
 作品集和项目案例展示
+- **项目卡片翻页展示**：每个项目包含多页内容
+  - 第一页：项目概述、标题、日期、标签
+  - 第二页及后续页：Key Features 分页展示（每页最多 2 个特性，显示 "Key Features (x/y):" 格式）
+  - 最后一页：项目链接（GitHub 代码、在线演示）
+- **项目时间标注**：每个项目卡片的所有页面都显示项目日期
+- **交互式卡片**：支持翻页浏览、悬停效果
 
 ### 音乐页面 (`/music`)
 - 网易云音乐播放器集成
@@ -117,7 +128,12 @@ npm start
 3. **暗色模式**: 支持主题切换
 4. **音效系统**: 交互音效和背景音乐
 5. **特效丰富**: 多种视觉特效增强体验
-6. **性能优化**: 使用 Next.js 15 的最新特性
+6. **项目展示优化**: 
+   - 项目卡片多页翻页展示
+   - Key Features 智能分页（每页最多 2 个特性）
+   - 项目时间标注显示
+7. **3D 效果**: Three.js 场景和玻璃质感组件
+8. **性能优化**: 使用 Next.js 15 的最新特性
 
 ## 📝 开发说明
 
