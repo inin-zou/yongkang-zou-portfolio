@@ -1,10 +1,59 @@
 "use client"
 
+import { useState } from "react"
 import FloatingNav from "@/components/floating-nav"
 import { useSound } from "@/components/sound-provider"
 
 export default function AboutPage() {
   const { playSound } = useSound()
+  const [collapsedSections, setCollapsedSections] = useState<Record<string, boolean>>({})
+  const [cardOrder, setCardOrder] = useState<string[]>([
+    "education",
+    "work",
+    "languages",
+    "programming",
+    "certifications",
+    "skills"
+  ])
+  const [draggedCard, setDraggedCard] = useState<string | null>(null)
+
+  const toggleSection = (sectionId: string) => {
+    playSound('click')
+    setCollapsedSections(prev => ({
+      ...prev,
+      [sectionId]: !prev[sectionId]
+    }))
+  }
+
+  const handleDragStart = (e: React.DragEvent, cardId: string) => {
+    setDraggedCard(cardId)
+    e.dataTransfer.effectAllowed = "move"
+  }
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault()
+    e.dataTransfer.dropEffect = "move"
+  }
+
+  const handleDrop = (e: React.DragEvent, targetCardId: string) => {
+    e.preventDefault()
+    if (!draggedCard || draggedCard === targetCardId) return
+
+    const newOrder = [...cardOrder]
+    const draggedIndex = newOrder.indexOf(draggedCard)
+    const targetIndex = newOrder.indexOf(targetCardId)
+
+    newOrder.splice(draggedIndex, 1)
+    newOrder.splice(targetIndex, 0, draggedCard)
+
+    setCardOrder(newOrder)
+    setDraggedCard(null)
+    playSound('click')
+  }
+
+  const handleDragEnd = () => {
+    setDraggedCard(null)
+  }
 
   const languages = [
     { name: "Chinese", level: "Native", stars: 5 },
@@ -102,27 +151,34 @@ export default function AboutPage() {
     },
   ]
 
-  return (
-    <>
-      <div className="modern-page-container">
-        {/* Header */}
-        <div className="modern-header">
-          <h1 className="modern-title">ABOUT_ME.txt</h1>
-          <p className="modern-subtitle">AI Engineer</p>
-        </div>
+  const renderCard = (cardId: string) => {
+    switch (cardId) {
+      case "education":
+        return (
+          <section 
+            className="modern-section"
+            draggable
+            onDragStart={(e) => handleDragStart(e, cardId)}
+            onDragOver={handleDragOver}
+            onDrop={(e) => handleDrop(e, cardId)}
+            onDragEnd={handleDragEnd}
+            style={{ cursor: draggedCard === cardId ? 'grabbing' : 'grab' }}
+          >
+              <div className="section-header">
+                <h2 className="section-title">
+                  <span className="title-icon">🎓</span>
+                  Education
+                </h2>
+                <button 
+                  className="minimize-button"
+                  onClick={() => toggleSection('education')}
+                  aria-label="Toggle section"
+                >
+                  {collapsedSections['education'] ? '▼' : '▲'}
+                </button>
+              </div>
 
-        {/* Main Content Grid */}
-        <div className="modern-content-grid">
-          {/* Left Column - Experience */}
-          <div className="modern-column">
-            {/* Education Section */}
-            <section className="modern-section">
-              <h2 className="section-title">
-                <span className="title-icon">🎓</span>
-                Education
-              </h2>
-
-              <div className="timeline">
+              {!collapsedSections['education'] && <div className="timeline">
                 <div className="timeline-item">
                   <div className="timeline-content">
                     <h3 className="item-title">M.S. in Computer Science (2nd Year)</h3>
@@ -159,17 +215,35 @@ export default function AboutPage() {
                     </ul>
                   </div>
                 </div>
-              </div>
+              </div>}
             </section>
+          )
+      case "work":
+        return (
+          <section 
+            className="modern-section"
+            draggable
+            onDragStart={(e) => handleDragStart(e, cardId)}
+            onDragOver={handleDragOver}
+            onDrop={(e) => handleDrop(e, cardId)}
+            onDragEnd={handleDragEnd}
+            style={{ cursor: draggedCard === cardId ? 'grabbing' : 'grab' }}
+          >
+              <div className="section-header">
+                <h2 className="section-title">
+                  <span className="title-icon">💼</span>
+                  Work Experience
+                </h2>
+                <button 
+                  className="minimize-button"
+                  onClick={() => toggleSection('work')}
+                  aria-label="Toggle section"
+                >
+                  {collapsedSections['work'] ? '▼' : '▲'}
+                </button>
+              </div>
 
-            {/* Work Experience Section */}
-            <section className="modern-section">
-              <h2 className="section-title">
-                <span className="title-icon">💼</span>
-                Work Experience
-              </h2>
-
-              <div className="timeline">
+              {!collapsedSections['work'] && <div className="timeline">
                 <div className="timeline-item">
                   <div className="timeline-content">
                     <h3 className="item-title">AI Engineer</h3>
@@ -243,20 +317,35 @@ export default function AboutPage() {
                     </ul>
                   </div>
                 </div>
-              </div>
+              </div>}
             </section>
-          </div>
+          )
+      case "languages":
+        return (
+          <section 
+            className="modern-section"
+            draggable
+            onDragStart={(e) => handleDragStart(e, cardId)}
+            onDragOver={handleDragOver}
+            onDrop={(e) => handleDrop(e, cardId)}
+            onDragEnd={handleDragEnd}
+            style={{ cursor: draggedCard === cardId ? 'grabbing' : 'grab' }}
+          >
+              <div className="section-header">
+                <h2 className="section-title">
+                  <span className="title-icon">🌍</span>
+                  Languages
+                </h2>
+                <button 
+                  className="minimize-button"
+                  onClick={() => toggleSection('languages')}
+                  aria-label="Toggle section"
+                >
+                  {collapsedSections['languages'] ? '▼' : '▲'}
+                </button>
+              </div>
 
-          {/* Right Column - Skills */}
-          <div className="modern-column">
-            {/* Languages Section */}
-            <section className="modern-section">
-              <h2 className="section-title">
-                <span className="title-icon">🌍</span>
-                Languages
-              </h2>
-
-              <div className="languages-grid">
+              {!collapsedSections['languages'] && <div className="languages-grid">
                 {languages.map((lang, index) => (
                   <div key={index} className="language-item">
                     <div className="language-info">
@@ -272,50 +361,104 @@ export default function AboutPage() {
                     </div>
                   </div>
                 ))}
-              </div>
+              </div>}
             </section>
+          )
+      case "programming":
+        return (
+          <section 
+            className="modern-section"
+            draggable
+            onDragStart={(e) => handleDragStart(e, cardId)}
+            onDragOver={handleDragOver}
+            onDrop={(e) => handleDrop(e, cardId)}
+            onDragEnd={handleDragEnd}
+            style={{ cursor: draggedCard === cardId ? 'grabbing' : 'grab' }}
+          >
+              <div className="section-header">
+                <h2 className="section-title">
+                  <span className="title-icon">💻</span>
+                  Programming Languages
+                </h2>
+                <button 
+                  className="minimize-button"
+                  onClick={() => toggleSection('programming')}
+                  aria-label="Toggle section"
+                >
+                  {collapsedSections['programming'] ? '▼' : '▲'}
+                </button>
+              </div>
 
-            {/* Programming Languages */}
-            <section className="modern-section">
-              <h2 className="section-title">
-                <span className="title-icon">💻</span>
-                Programming Languages
-              </h2>
-
-              <div className="skill-tags-container">
+              {!collapsedSections['programming'] && <div className="skill-tags-container">
                 {programmingLanguages.map((lang, index) => (
                   <span key={index} className="skill-tag programming">
                     {lang}
                   </span>
                 ))}
-              </div>
+              </div>}
             </section>
+          )
+      case "certifications":
+        return (
+          <section 
+            className="modern-section"
+            draggable
+            onDragStart={(e) => handleDragStart(e, cardId)}
+            onDragOver={handleDragOver}
+            onDrop={(e) => handleDrop(e, cardId)}
+            onDragEnd={handleDragEnd}
+            style={{ cursor: draggedCard === cardId ? 'grabbing' : 'grab' }}
+          >
+              <div className="section-header">
+                <h2 className="section-title">
+                  <span className="title-icon">📜</span>
+                  Certifications
+                </h2>
+                <button 
+                  className="minimize-button"
+                  onClick={() => toggleSection('certifications')}
+                  aria-label="Toggle section"
+                >
+                  {collapsedSections['certifications'] ? '▼' : '▲'}
+                </button>
+              </div>
 
-            {/* Certifications */}
-            <section className="modern-section">
-              <h2 className="section-title">
-                <span className="title-icon">📜</span>
-                Certifications
-              </h2>
-
-              <div className="certifications-list">
+              {!collapsedSections['certifications'] && <div className="certifications-list">
                 {certifications.map((cert, index) => (
                   <div key={index} className="certification-item">
                     <span className="cert-check">✓</span>
                     <span className="cert-text">{cert}</span>
                   </div>
                 ))}
-              </div>
+              </div>}
             </section>
+          )
+      case "skills":
+        return (
+          <section 
+            className="modern-section"
+            draggable
+            onDragStart={(e) => handleDragStart(e, cardId)}
+            onDragOver={handleDragOver}
+            onDrop={(e) => handleDrop(e, cardId)}
+            onDragEnd={handleDragEnd}
+            style={{ cursor: draggedCard === cardId ? 'grabbing' : 'grab' }}
+          >
+              <div className="section-header">
+                <h2 className="section-title">
+                  <span className="title-icon">🛠️</span>
+                  Technical Skills
+                </h2>
+                <button 
+                  className="minimize-button"
+                  onClick={() => toggleSection('skills')}
+                  aria-label="Toggle section"
+                >
+                  {collapsedSections['skills'] ? '▼' : '▲'}
+                </button>
+              </div>
 
-            {/* Technical Skills Grid */}
-            <section className="modern-section">
-              <h2 className="section-title">
-                <span className="title-icon">🛠️</span>
-                Technical Skills
-              </h2>
-
-              <div className="skills-grid">
+              {!collapsedSections['skills'] && <div className="skills-grid">
                 {skillCategories.map((category, index) => (
                   <div key={index} className="skill-category-card">
                     <h3 className="category-title">{category.title}</h3>
@@ -346,9 +489,31 @@ export default function AboutPage() {
                     )}
                   </div>
                 ))}
-              </div>
+              </div>}
             </section>
-          </div>
+          )
+      default:
+        return null
+    }
+  }
+
+  return (
+    <>
+      <div className="page-container">
+        {/* Header */}
+        <div className="modern-header">
+          <h1 className="modern-title">ABOUT_ME.txt</h1>
+          <p className="modern-subtitle">AI Engineer</p>
+        </div>
+
+        {/* Drag Hint */}
+        <p className="text-cyan-400/60 text-xs mb-6 text-center animate-pulse">💡 Try dragging the cards below to rearrange them</p>
+
+        {/* Main Content Grid */}
+        <div className="modern-content-grid">
+          {cardOrder.map(cardId => (
+            <div key={cardId}>{renderCard(cardId)}</div>
+          ))}
         </div>
       </div>
 
