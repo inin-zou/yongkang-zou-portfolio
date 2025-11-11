@@ -1,0 +1,56 @@
+.grid-motion-container {
+  column-count: 3;
+  column-gap: 1.5rem;
+  width: 100%;
+  padding: 2rem 0;
+}
+
+@media (max-width: 1024px) {
+  .grid-motion-container {
+    column-count: 2;
+  }
+}
+
+@media (max-width: 640px) {
+  .grid-motion-container {
+    column-count: 1;
+  }
+}
+
+.grid-motion-item {
+  break-inside: avoid;
+  margin-bottom: 1.5rem;
+  border-radius: 12px;
+  overflow: hidden;
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(94, 234, 212, 0.2);
+  transition: all 0.3s ease;
+}
+
+.grid-motion-item:hover {
+  transform: translateY(-4px);
+  border-color: rgba(94, 234, 212, 0.5);
+  box-shadow: 0 8px 24px rgba(94, 234, 212, 0.15);
+}
+
+.grid-motion-item.image-item {
+  padding: 0;
+}
+
+.grid-motion-item.text-item,
+.grid-motion-item.jsx-item {
+  padding: 1.5rem;
+}
+
+.grid-motion-image {
+  display: block;
+  border-radius: 12px;
+}
+
+.grid-motion-item.text-item p {
+  color: rgba(226, 232, 240, 0.9);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin: 0;
+}

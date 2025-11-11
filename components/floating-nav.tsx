@@ -18,7 +18,7 @@ export default function FloatingNav() {
     { name: "Home", path: "/", icon: <Home size={16} />, color: "nav-button-blue" },
     { name: "Projects", path: "/projects", icon: <FolderOpen size={16} />, color: "nav-button-cyan" },
     { name: "About", path: "/about", icon: <User size={16} />, color: "nav-button-magenta" },
-    // { name: "Writing", path: "/writing", icon: <PenTool size={16} />, color: "nav-button-yellow" },
+    { name: "Writing", path: "/writing", icon: <PenTool size={16} />, color: "nav-button-yellow" },
     { name: "Music", path: "/music", icon: <Music size={16} />, color: "nav-button-green" },
     { name: "Contact", path: "/contact", icon: <Mail size={16} />, color: "nav-button-red" },
     {

@@ -27,6 +27,7 @@ export default function Home() {
     { label: "START", action: () => scrollToIntro() },
     { label: "PROJECTS", action: () => router.push("/projects") },
     { label: "ABOUT ME", action: () => router.push("/about") },
+    { label: "BLOGS", action: () => router.push("/writing") },
     { label: "MUSIC", action: () => router.push("/music") },
     { label: "CONTACT", action: () => router.push("/contact") },
   ]
