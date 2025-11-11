@@ -13,10 +13,10 @@ export default function WritingPage() {
   const posts = [
     {
       title: "Hackathon Journey 2024-2025",
-      date: "2024.10 - 2025.01",
+      date: "2024.10 - 2025.11",
       excerpt: (
         <>
-          From 2024.10 to 2025.01, I've participated in <CountUp from={0} to={15} duration={2} className="text-electric-blue" /> hackathons, winning <CountUp from={0} to={8} duration={2} className="text-electric-blue" /> times:
+          From 2024.10 to 2025.11, I've participated in <CountUp from={0} to={15} duration={2} className="text-electric-blue" /> hackathons, winning <CountUp from={0} to={8} duration={2} className="text-electric-blue" /> times:
           <br /><br />
           🏆 Anthropics x Entrepreneurs First - Builder Retreat: 1st Place Winner (2025.10)<br />
           🏆 Tech:Europe x OpenAI Community Winner (2025.09)<br />
