@@ -1803,6 +1803,9 @@ body {
     0 2px 8px 0 rgba(0, 0, 0, 0.2);
   z-index: 100;
   transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
 .chatbot-container.minimized {
@@ -1865,6 +1868,7 @@ body {
   border-radius: 12px 12px 0 0;
   padding: 0.8rem;
   margin: -0.2rem -0.2rem 1rem -0.2rem;
+  flex-shrink: 0;
 }
 
 .minimize-button {
@@ -1908,7 +1912,9 @@ body {
   display: flex;
   flex-direction: column;
   margin-bottom: 1rem;
-  min-height: 300px;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
 }
 
 .chatbot-messages {
@@ -1919,9 +1925,9 @@ body {
   background: linear-gradient(135deg, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.2) 100%);
   border: 1px solid rgba(0, 255, 247, 0.25);
   border-radius: 16px;
-  max-height: 500px;
   overflow-y: auto;
   flex: 1;
+  min-height: 0;
   backdrop-filter: blur(15px);
   box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.3), 0 2px 12px rgba(0, 255, 247, 0.1);
 }
@@ -2206,6 +2212,7 @@ body {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2),
               inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  flex-shrink: 0;
 }
 
 .container-ia-chat:hover {
