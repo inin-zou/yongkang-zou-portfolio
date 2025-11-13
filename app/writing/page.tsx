@@ -40,9 +40,21 @@ export default function WritingPage() {
         <h1 className="page-title blinking-cursor">KNOWLEDGE BASE</h1>
         <p className="page-subtitle">Accessing archived technical documentation...</p>
 
-        <div className="projects-grid">
+        <div style={{ marginBottom: "2rem", width: "100%" }}>
           {posts.map((post, index) => (
-            <div key={index} className="project-card ai">
+            <div 
+              key={index} 
+              className="project-card ai"
+              style={{ 
+                opacity: 1,
+                display: "block",
+                visibility: "visible",
+                width: "100%",
+                maxWidth: "100%",
+                height: "auto",
+                overflow: "visible"
+              }}
+            >
               <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "1rem" }}>
                 <Calendar size={12} className="text-electric-blue" />
                 <span className="timeline-date">{post.date}</span>
