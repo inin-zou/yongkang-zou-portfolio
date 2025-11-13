@@ -48,6 +48,15 @@ AI Engineer, 8× Hackathon Winner, Actively seeking a position as AI Engineer.
 
 ## Project Experience
 
+### **LyricMind | Fine-tuned Qwen2.5-7B Lyric Generation System**
+**Oct 2025**
+- Built an AI lyric-writing system fine-tuned from Qwen2.5-7B using QLoRA + RLAIF-DPO, producing high-quality lyrics with natural rhyme, emotional alignment, and consistent themes.
+- Collected & processed 30K+ songs (~10–12M tokens) for SFT; trained efficiently on Nebius A100 40GB (~12h, ~$36) with a single-GPU pipeline.
+- Designed a hybrid Reward Function combining AI feedback, a custom Rhyme Scorer, and Emotion Analyzer to drive DPO preference optimization toward musically pleasing outputs.
+- Implemented a self-improving post-training loop with Self-Consistency + Self-Reward sampling, enabling the model to auto-generate, evaluate, and refine its own best outputs without external data.
+- Achieved +24% rhyme naturalness and +19% emotion coherence over the SFT baseline; generated lyrics show stronger flow, sentiment stability, and stylistic diversity (pop, rap, classical).
+- Delivered a complete LLaMA Factory training pipeline (SFT, DPO, self-evolution) with scripts compatible with both API-based and local fine-tuning workflows.
+
 ### **Wiggly | AI-Powered 3D Interactive Animation Design Platform, Big Berlin Hackathon**  
 **Oct 2025**
 - Built a platform that turns user-uploaded front/back images into **seamless textures** and auto-generated **3D T-shirt models**, rendered interactively in the browser.

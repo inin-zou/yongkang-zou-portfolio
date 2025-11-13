@@ -31,7 +31,6 @@ export default function ProjectsPage() {
   const [loading, setLoading] = useState(true)
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
   const [showFavoriteOnly, setShowFavoriteOnly] = useState(false)
-  const [isChatbotMinimized, setIsChatbotMinimized] = useState(false)
   const { playSound } = useSound()
 
   useEffect(() => {
@@ -71,7 +70,7 @@ export default function ProjectsPage() {
         },
         {
           id: 3,
-          title: "ZenQ – Quantum ML Framework",
+          title: "🏆 ZenQ – Quantum ML Framework",
           description: "Winner at 1st phrase of Perceval Challenge, Quantum CNN using Perceval to enhance photonic computation via HW-preserving architecture.",
           tags: ["Quantum ML", "QCNN", "Perceval", "PyTorch", "Python"],
           category: "hackathon",
@@ -341,13 +340,13 @@ export default function ProjectsPage() {
           id: 19,
           title: "LyricMind – Fine-tuned Qwen2.5-7B Lyric Generation System",
           description:
-            "AI lyric-writing model via QLoRA and RLAIF-DPO, fine-tuned from Qwen2.5-7B to generate high-quality Chinese lyrics.",
+            "AI lyric-writing model via QLoRA and RLAIF-DPO, fine-tuned from Qwen2.5-7B to generate high-quality lyrics.",
           descriptionPages: [
-            "🎵 Developed an AI lyric-writing model via QLoRA and RLAIF-DPO, fine-tuned from Qwen2.5-7B to generate high-quality Chinese lyrics with natural rhyme, emotion alignment, and theme consistency.",
+            "🎵 Developed an AI lyric-writing model via QLoRA and RLAIF-DPO, fine-tuned from Qwen2.5-7B to generate high-quality lyrics with natural rhyme, emotion alignment, and theme consistency.",
             "📊 Collected and processed 30K+ songs (~10-12M tokens) for SFT training; leveraged Nebius A100 40GB GPU (~12h total, ~$36) for efficient single-card training.",
             "🎯 Designed a hybrid Reward Function combining AI feedback, Rhyme Scorer, and Emotion Analyzer for automated preference scoring; integrated into DPO fine-tuning to bias the model toward musically pleasing outputs.",
             "🔄 Implemented a self-improving post-training stage with Self-Consistency and Self-Reward mechanisms—model auto-generates, evaluates, and re-trains on its best samples without new datasets.",
-            "📈 Achieved +24% rhyme naturalness and +19% emotion coherence compared to the SFT baseline; lyrics show improved flow, sentiment stability, and stylistic diversity (pop, rap, classical).",
+            // "📈 Achieved +24% rhyme naturalness and +19% emotion coherence compared to the SFT baseline; lyrics show improved flow, sentiment stability, and stylistic diversity (pop, rap, classical).",
             "🚀 Delivered full training pipeline on LLaMA Factory, including SFT, DPO, and self-evolution scripts, compatible with both API and local fine-tuning workflows."
           ],
           tags: ["Qwen2.5-7B", "QLoRA", "RLAIF-DPO", "LLaMA Factory", "Nebius", "Python"],
@@ -400,7 +399,7 @@ export default function ProjectsPage() {
 
   return (
     <>
-      <div className={`page-container projects-page-with-chatbot ${isChatbotMinimized ? 'chatbot-minimized' : ''}`}>
+      <div className="page-container projects-page-with-chatbot">
         <h1 className="page-title blinking-cursor">PROJECT DATABASE</h1>
         <p className="page-subtitle">Access granted to classified archives.</p>
 
@@ -497,9 +496,17 @@ export default function ProjectsPage() {
                         
                         featurePages.push(
                           <div key={`page-features-${i}`} className="carousel-page">
-                            <div className="project-title">{project.title}</div>
+                            <div className="project-title">
+                              {project.isFavorite && <span className="favorite-icon">⭐</span>}
+                              {project.title}
+                            </div>
                             <div className="project-date">{project.date}</div>
                             <div className="project-tags">
+                              {project.isFavorite && (
+                                <span className="project-tag favorite-tag">
+                                  FAVORITE
+                                </span>
+                              )}
                               {project.tags.map((tag, index) => (
                                 <span key={index} className="project-tag">
                                   {tag}
@@ -521,9 +528,17 @@ export default function ProjectsPage() {
                   : []),
                 // Page 3: Links
                 <div key="page-3" className="carousel-page links-page">
-                  <div className="project-title">{project.title}</div>
+                  <div className="project-title">
+                    {project.isFavorite && <span className="favorite-icon">⭐</span>}
+                    {project.title}
+                  </div>
                   <div className="project-date">{project.date}</div>
                   <div className="project-tags">
+                    {project.isFavorite && (
+                      <span className="project-tag favorite-tag">
+                        FAVORITE
+                      </span>
+                    )}
                     {project.tags.map((tag, index) => (
                       <span key={index} className="project-tag">
                         {tag}
@@ -572,19 +587,40 @@ export default function ProjectsPage() {
         )}
       </div>
 
-      <ProjectChatbot onMinimizeChange={setIsChatbotMinimized} />
+      <ProjectChatbot />
 
-      <div style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        width: '100vw',
-        height: '100vh',
-        zIndex: -10,
-        pointerEvents: 'none'
-      }}>
-        <Spline scene="/computer.splinecode" />
-      </div>
+       <div 
+         className="spline-container"
+         style={{
+           position: 'fixed',
+           bottom: '0vh',
+           left: '0vw',
+           right: '0',
+           width: '100vw',
+           height: '90vh',
+           zIndex: 5,
+           overflow: 'visible',
+           pointerEvents: 'none',
+         }}
+       >
+         <div 
+           className="spline-wrapper"
+           style={{
+             position: 'absolute',
+             top: 0,
+             left: 0,
+             width: '100%',
+             height: '100%',
+             opacity: 0.9,
+             filter: 'drop-shadow(0 0 40px #00ffff80)',
+             pointerEvents: 'auto'
+           }}>
+           <Spline 
+             scene="/cute_computer.splinecode"
+             onLoad={() => console.log('Spline model loaded!')}
+           />
+         </div>
+       </div>
 
       <FloatingNav />
     </>

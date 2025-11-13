@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useRef, useEffect } from "react"
-import { Send, Mic, MicOff, Minimize2, Maximize2 } from "lucide-react"
+import { Send, Mic, MicOff } from "lucide-react"
 import { useSound } from "@/components/sound-provider"
 
 interface Message {
@@ -11,11 +11,7 @@ interface Message {
   timestamp: Date
 }
 
-interface ProjectChatbotProps {
-  onMinimizeChange?: (isMinimized: boolean) => void
-}
-
-export default function ProjectChatbot({ onMinimizeChange }: ProjectChatbotProps) {
+export default function ProjectChatbot() {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: 1,
@@ -27,7 +23,7 @@ export default function ProjectChatbot({ onMinimizeChange }: ProjectChatbotProps
   const [inputValue, setInputValue] = useState("")
   const [isListening, setIsListening] = useState(false)
   const [isTyping, setIsTyping] = useState(false)
-  const [isMinimized, setIsMinimized] = useState(false)
+  const [mounted, setMounted] = useState(false)
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const { playSound } = useSound()
 
@@ -38,6 +34,19 @@ export default function ProjectChatbot({ onMinimizeChange }: ProjectChatbotProps
   useEffect(() => {
     scrollToBottom()
   }, [messages])
+
+  useEffect(() => {
+    // Mark as mounted to avoid SSR/client time formatting mismatch
+    setMounted(true)
+  }, [])
+
+  const formatTime = (date: Date) =>
+    date.toLocaleTimeString('en-US', {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false,
+      timeZone: 'UTC',
+    })
 
   const handleSend = async () => {
     if (!inputValue.trim()) return
@@ -105,24 +114,12 @@ export default function ProjectChatbot({ onMinimizeChange }: ProjectChatbotProps
   }
 
   return (
-    <div className={`chatbot-container ${isMinimized ? "minimized" : ""}`}>
+    <div className="chatbot-container">
       <div className="chatbot-header">
         <div>
-          <h3 className="chatbot-title">PROJECT Q&A ASSISTANT</h3>
+          {/* <h3 className="chatbot-title">PROJECT Q&A ASSISTANT</h3> */}
           <p className="chatbot-subtitle">Ask me about Yongkang's projects</p>
         </div>
-        <button
-          className="minimize-button"
-          onClick={() => {
-            playSound("click")
-            const newMinimizedState = !isMinimized
-            setIsMinimized(newMinimizedState)
-            onMinimizeChange?.(newMinimizedState)
-          }}
-          aria-label={isMinimized ? "Maximize" : "Minimize"}
-        >
-          {isMinimized ? <Maximize2 size={18} /> : <Minimize2 size={18} />}
-        </button>
       </div>
 
       <div className="chatbot-content">
@@ -131,10 +128,7 @@ export default function ProjectChatbot({ onMinimizeChange }: ProjectChatbotProps
             <div key={message.id} className={`message ${message.sender}`}>
               <div className="message-content">{message.text}</div>
               <div className="message-time">
-                {message.timestamp.toLocaleTimeString([], {
-                  hour: "2-digit",
-                  minute: "2-digit",
-                })}
+                {mounted ? formatTime(message.timestamp) : "--:--"}
               </div>
             </div>
           ))}
@@ -157,21 +151,51 @@ export default function ProjectChatbot({ onMinimizeChange }: ProjectChatbotProps
         </div>
       </div>
 
-      <div className="chatbot-input-wrapper">
-        <button className={`voice-button ${isListening ? "active" : ""}`} onClick={toggleVoice}>
-          {isListening ? <Mic size={18} /> : <MicOff size={18} />}
-        </button>
+      <div className="container-ia-chat">
+        <input
+          type="checkbox"
+          name="input-voice"
+          id="input-voice"
+          className="input-voice"
+          style={{ display: 'none' }}
+          checked={isListening}
+          onChange={toggleVoice}
+        />
         <input
           type="text"
-          className="chatbot-input"
-          placeholder="Type your question..."
+          name="input-text"
+          id="input-text"
+          placeholder="Ask Anything..."
+          className="input-text"
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
           onKeyPress={handleKeyPress}
+          required
         />
-        <button className="send-button" onClick={handleSend}>
-          <Send size={18} />
-        </button>
+        <label htmlFor="input-voice" className="label-voice">
+          <svg className="icon-voice" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+            <path fill="none" stroke="currentColor" strokeLinecap="round" strokeWidth="2" d="M12 4v16m4-13v10M8 7v10m12-6v2M4 11v2"></path>
+          </svg>
+          <div className="ai">
+            <div className="container">
+              <div className="c c4"></div>
+              <div className="c c1"></div>
+              <div className="c c2"></div>
+              <div className="c c3"></div>
+              <div className="rings"></div>
+            </div>
+            <div className="glass"></div>
+          </div>
+          <div className="text-voice">
+            <p>Conversation Started</p>
+            <p>Press to cancel the conversation</p>
+          </div>
+        </label>
+        <label htmlFor="input-text" className="label-text" onClick={handleSend}>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+            <path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m5 12l7-7l7 7m-7 7V5"></path>
+          </svg>
+        </label>
       </div>
     </div>
   )

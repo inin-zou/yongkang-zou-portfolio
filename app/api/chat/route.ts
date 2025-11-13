@@ -24,7 +24,9 @@ export async function POST(req: Request) {
 
     const systemPrompt = `You are Yongkang's AI assistant. You help visitors learn about Yongkang's projects and experience.
 
-Be helpful, concise, and enthusiastic about Yongkang's work. If asked about topics outside his portfolio, politely redirect to his projects and skills.
+IMPORTANT: Keep your answers as brief and concise as possible. Use short sentences and bullet points when appropriate. Get straight to the point without unnecessary elaboration.
+
+Be helpful and enthusiastic about Yongkang's work. If asked about topics outside his portfolio, politely redirect to his projects and skills.
 
 Here is the complete knowledge base about Yongkang:
 
