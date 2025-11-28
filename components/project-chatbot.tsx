@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useRef, useEffect } from "react"
-import { Send, Mic, MicOff } from "lucide-react"
+import { Send, Mic, MicOff, Minus, Square, ChevronUp, ChevronDown } from "lucide-react"
 import { useSound } from "@/components/sound-provider"
 
 interface Message {
@@ -24,6 +24,7 @@ export default function ProjectChatbot() {
   const [isListening, setIsListening] = useState(false)
   const [isTyping, setIsTyping] = useState(false)
   const [mounted, setMounted] = useState(false)
+  const [isMinimized, setIsMinimized] = useState(false)
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const { playSound } = useSound()
 
@@ -106,6 +107,11 @@ export default function ProjectChatbot() {
     // Voice recognition logic would go here
   }
 
+  const toggleMinimize = () => {
+    playSound("click")
+    setIsMinimized(!isMinimized)
+  }
+
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault()
@@ -114,14 +120,28 @@ export default function ProjectChatbot() {
   }
 
   return (
-    <div className="chatbot-container">
-      <div className="chatbot-header">
-        <div>
-          {/* <h3 className="chatbot-title">PROJECT Q&A ASSISTANT</h3> */}
-          <p className="chatbot-subtitle">Ask me about Yongkang's projects</p>
+    <div className={`chatbot-container ${isMinimized ? 'minimized' : ''}`}>
+      <div className="chatbot-header" onClick={toggleMinimize}>
+        <div className="flex items-center justify-between w-full">
+          <div>
+            {/* <h3 className="chatbot-title">PROJECT Q&A ASSISTANT</h3> */}
+            <p className="chatbot-subtitle">Ask me about Yongkang's projects</p>
+          </div>
+          <button 
+            onClick={(e) => {
+                e.stopPropagation();
+                toggleMinimize();
+            }}
+            className="minimize-button"
+            aria-label={isMinimized ? "Expand chat" : "Minimize chat"}
+          >
+            {isMinimized ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
+          </button>
         </div>
       </div>
 
+      {!isMinimized && (
+        <>
       <div className="chatbot-content">
         <div className="chatbot-messages">
           {messages.map((message) => (
@@ -197,6 +217,8 @@ export default function ProjectChatbot() {
           </svg>
         </label>
       </div>
+      </>
+      )}
     </div>
   )
 }

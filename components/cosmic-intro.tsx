@@ -351,14 +351,17 @@ export default function CosmicIntro({ onComplete }: { onComplete: () => void }) 
 
   useEffect(() => {
     const handleMouseMove = (event: MouseEvent) => {
-        // Normalize to -1 to 1
         mouseRef.current = {
             x: (event.clientX / window.innerWidth) * 2 - 1,
             y: -(event.clientY / window.innerHeight) * 2 + 1
         }
     }
+    
     window.addEventListener('mousemove', handleMouseMove)
-    return () => window.removeEventListener('mousemove', handleMouseMove)
+    
+    return () => {
+        window.removeEventListener('mousemove', handleMouseMove)
+    }
   }, [])
   
   // Random hex codes for system log effect
@@ -541,7 +544,7 @@ export default function CosmicIntro({ onComplete }: { onComplete: () => void }) 
   useEffect(() => {
     if (!mounted) return
 
-    const handleKeyPress = () => {
+    const handleSkip = () => {
       if (phase >= 3 && !isExiting) {
         setIsExiting(true)
         setTimeout(() => {
@@ -550,8 +553,15 @@ export default function CosmicIntro({ onComplete }: { onComplete: () => void }) 
       }
     }
 
-    window.addEventListener('keydown', handleKeyPress)
-    return () => window.removeEventListener('keydown', handleKeyPress)
+    window.addEventListener('keydown', handleSkip)
+    window.addEventListener('click', handleSkip)
+    window.addEventListener('touchstart', handleSkip)
+    
+    return () => {
+      window.removeEventListener('keydown', handleSkip)
+      window.removeEventListener('click', handleSkip)
+      window.removeEventListener('touchstart', handleSkip)
+    }
   }, [mounted, phase, onComplete, isExiting])
 
   if (!mounted) {
@@ -643,7 +653,7 @@ export default function CosmicIntro({ onComplete }: { onComplete: () => void }) 
              >
                 <span>{loadingProgress.toString().padStart(3, '0')}%</span>
                 <span className={isBootPhase ? "animate-pulse" : ""}>
-                    {phase < 4 ? "LOADING_ASSETS" : "PRESS_ANY_KEY"}
+                    {phase < 4 ? "LOADING_ASSETS" : "TAP_OR_PRESS_KEY"}
                 </span>
              </div>
         </div>
@@ -661,17 +671,17 @@ export default function CosmicIntro({ onComplete }: { onComplete: () => void }) 
                     className="font-pixel text-sm tracking-widest px-12 py-6 transition-all duration-300"
                     style={{
                         color: '#00fff7',
-                        background: 'rgba(5, 10, 20, 0.75)', // Deeper, more opaque background
-                        backdropFilter: 'blur(12px)',        // Stronger blur
-                        WebkitBackdropFilter: 'blur(12px)',  // Safari support
+                        background: 'rgba(5, 10, 20, 0.75)',
+                        backdropFilter: 'blur(12px)',
+                        WebkitBackdropFilter: 'blur(12px)',
                         border: '1px solid rgba(0, 255, 247, 0.4)',
-                        boxShadow: '0 0 30px rgba(0, 0, 0, 0.8), 0 0 15px rgba(0, 255, 247, 0.2), inset 0 0 20px rgba(0, 255, 247, 0.05)', // Multi-layer shadow/glow
+                        boxShadow: '0 0 30px rgba(0, 0, 0, 0.8), 0 0 15px rgba(0, 255, 247, 0.2), inset 0 0 20px rgba(0, 255, 247, 0.05)',
                         textShadow: '0 0 8px rgba(0, 255, 247, 0.8)',
                         borderRadius: '2px',
                         display: 'flex',
                         alignItems: 'center',
                         gap: '1.5rem',
-                        minWidth: '400px', // Ensure it has a good width presence
+                        minWidth: '400px',
                         justifyContent: 'center'
                     }}
                  >

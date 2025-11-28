@@ -6,32 +6,21 @@ import FloatingNav from "@/components/floating-nav"
 import { AudioVisualizer } from "@/components/audio-visualizer"
 import { useSound } from "@/components/sound-provider"
 import NetEaseMusicPlayer from "@/components/netease-music-player"
-import CyberLoader from "@/components/cyber-loader"
 
 export default function MusicPage() {
   const { playSound } = useSound()
-  const [isLoading, setIsLoading] = useState(true)
-  const [isPlaying, setIsPlaying] = useState(false)
+  const [isPlaying, setIsPlaying] = useState(true)
   const [eqBars, setEqBars] = useState<number[]>([])
 
   useEffect(() => {
-    // Simulate loading delay
-    const timer = setTimeout(() => {
-      setIsLoading(false)
-      setIsPlaying(true)
-      playSound("success")
-    }, 2000)
-
-    // Randomize EQ bars occasionally
     const eqInterval = setInterval(() => {
       setEqBars(Array.from({ length: 20 }, () => Math.random() * 100))
     }, 200)
 
     return () => {
-      clearTimeout(timer)
       clearInterval(eqInterval)
     }
-  }, [playSound])
+  }, [])
 
   const handleLinkClick = () => {
     playSound("click")
@@ -40,10 +29,7 @@ export default function MusicPage() {
   return (
     <>
       <div className="monitor-scroll-area">
-        {isLoading ? (
-          <CyberLoader />
-        ) : (
-          <div className="page-container">
+        <div className="page-container">
             <div className="flex justify-between items-end mb-8 border-b border-gray-800 pb-4">
               <div>
                 <h1 className="cyber-glitch-header page-title" data-text="SONIC_INTERFACE">SONIC_INTERFACE</h1>
@@ -212,7 +198,6 @@ export default function MusicPage() {
               </div>
             </div>
           </div>
-        )}
       </div>
 
       <FloatingNav />

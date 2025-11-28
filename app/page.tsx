@@ -40,18 +40,26 @@ export default function Home() {
 
   // Hide intro after animation completes or on any key press
   useEffect(() => {
-    const handleKeyPress = (e: KeyboardEvent | MouseEvent) => {
+    const handleSkipIntro = (e: KeyboardEvent | MouseEvent | TouchEvent) => {
       if (e instanceof KeyboardEvent && e.key === "Escape") {
          console.log("⏭️ ESC pressed - skipping intro")
+         setShowIntro(false)
+         playSound("click")
+      } else if (e instanceof MouseEvent || e instanceof TouchEvent) {
+         console.log("⏭️ Touch/Click - skipping intro")
          setShowIntro(false)
          playSound("click")
       }
     }
 
-    window.addEventListener("keydown", handleKeyPress)
+    window.addEventListener("keydown", handleSkipIntro)
+    window.addEventListener("click", handleSkipIntro)
+    window.addEventListener("touchstart", handleSkipIntro)
 
     return () => {
-      window.removeEventListener("keydown", handleKeyPress)
+      window.removeEventListener("keydown", handleSkipIntro)
+      window.removeEventListener("click", handleSkipIntro)
+      window.removeEventListener("touchstart", handleSkipIntro)
     }
   }, [playSound])
 

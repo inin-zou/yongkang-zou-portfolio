@@ -1,13 +1,11 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import FloatingNav from "@/components/floating-nav"
 import { useSound } from "@/components/sound-provider"
-import CyberLoader from "@/components/cyber-loader"
 
 export default function AboutPage() {
   const { playSound } = useSound()
-  const [loading, setLoading] = useState(true)
   const [collapsedSections, setCollapsedSections] = useState<Record<string, boolean>>({})
   const [cardOrder, setCardOrder] = useState<string[]>([
     "education",
@@ -18,15 +16,6 @@ export default function AboutPage() {
     "skills"
   ])
   const [draggedCard, setDraggedCard] = useState<string | null>(null)
-
-  useEffect(() => {
-    // Simulate system access delay
-    const timer = setTimeout(() => {
-      setLoading(false)
-      playSound("success")
-    }, 2000)
-    return () => clearTimeout(timer)
-  }, [playSound])
 
   const toggleSection = (sectionId: string) => {
     playSound('click')
@@ -511,33 +500,29 @@ export default function AboutPage() {
   return (
     <>
       <div className="monitor-scroll-area">
-        {loading ? (
-          <CyberLoader />
-        ) : (
-          <div className="page-container">
-            {/* Header */}
-            <div className="modern-header" style={{ borderBottom: '2px solid var(--neon-cyan)' }}>
-              <h1 className="cyber-glitch-header" data-text="PERSONNEL_FILE: YONGKANG_ZOU" style={{ fontSize: '1.8rem', marginBottom: '1rem' }}>
-                PERSONNEL_FILE: YONGKANG_ZOU
-              </h1>
-              <p className="modern-subtitle text-terminal-green">
-                <span className="blinking-cursor">STATUS: ACTIVE | ROLE: AI ENGINEER</span>
-              </p>
-            </div>
-
-            {/* Drag Hint */}
-            <p className="text-cyan-400/60 text-xs mb-6 text-center animate-pulse">
-              [SYSTEM_TIP]: DRAG_MODULES_TO_REORGANIZE
+        <div className="page-container">
+          {/* Header */}
+          <div className="modern-header" style={{ borderBottom: '2px solid var(--neon-cyan)' }}>
+            <h1 className="cyber-glitch-header" data-text="PERSONNEL_FILE: YONGKANG_ZOU" style={{ fontSize: '1.8rem', marginBottom: '1rem' }}>
+              PERSONNEL_FILE: YONGKANG_ZOU
+            </h1>
+            <p className="modern-subtitle text-terminal-green">
+              <span className="blinking-cursor">STATUS: ACTIVE | ROLE: AI ENGINEER</span>
             </p>
-
-            {/* Main Content Grid */}
-            <div className="modern-content-grid">
-              {cardOrder.map(cardId => (
-                <div key={cardId}>{renderCard(cardId)}</div>
-              ))}
-            </div>
           </div>
-        )}
+
+          {/* Drag Hint */}
+          <p className="text-cyan-400/60 text-xs mb-6 text-center animate-pulse">
+            [SYSTEM_TIP]: DRAG_MODULES_TO_REORGANIZE
+          </p>
+
+          {/* Main Content Grid */}
+          <div className="modern-content-grid">
+            {cardOrder.map(cardId => (
+              <div key={cardId}>{renderCard(cardId)}</div>
+            ))}
+          </div>
+        </div>
       </div>
 
       <FloatingNav />
