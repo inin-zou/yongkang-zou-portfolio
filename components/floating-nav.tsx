@@ -6,7 +6,11 @@ import { Home, FolderOpen, User, PenTool, Music, Mail, Github, Linkedin } from "
 import { useSound } from "./sound-provider"
 import GlassSurface from "./GlassSurface"
 
-export default function FloatingNav() {
+interface FloatingNavProps {
+  visible?: boolean
+}
+
+export default function FloatingNav({ visible = true }: FloatingNavProps) {
   const pathname = usePathname()
   const { playSound } = useSound()
 
@@ -38,7 +42,13 @@ export default function FloatingNav() {
   ]
 
   return (
-    <div className="floating-nav-wrapper">
+    <div 
+      className={`floating-nav-wrapper transition-all duration-700 ease-out ${
+        visible 
+          ? "translate-y-0 opacity-100" 
+          : "translate-y-[150%] opacity-0 pointer-events-none"
+      }`}
+    >
       <GlassSurface
         width={400}
         height={56}

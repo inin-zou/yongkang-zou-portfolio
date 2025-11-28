@@ -25,17 +25,24 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
       </head>
       <body className="font-pixel bg-deep-purple text-white">
-        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
+        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
           <SoundProvider>
-            <div className="cyberpunk-container">
-              <div className="scanlines"></div>
-              <div className="noise"></div>
-              <div className="crt-screen">
+            <div className="monitor-frame-fixed">
+              <div className="monitor-screen-inner">
+                <div className="scanlines"></div>
+                <div className="screen-reflection"></div>
+                
                 <Suspense>{children}</Suspense>
+              </div>
+              
+              <div className="monitor-badge-fixed">
+                <span>SYSTEM-OS</span>
+                <div className="monitor-power-led"></div>
               </div>
             </div>
           </SoundProvider>
         </ThemeProvider>
+        <div id="intro-portal"></div>
         <Analytics />
       </body>
     </html>

@@ -36,84 +36,86 @@ export default function WritingPage() {
 
   return (
     <>
-      <div className="page-container">
-        <h1 className="page-title blinking-cursor">KNOWLEDGE BASE</h1>
-        <p className="page-subtitle">Accessing archived technical documentation...</p>
+      <div className="monitor-scroll-area">
+        <div className="page-container">
+          <h1 className="page-title blinking-cursor">KNOWLEDGE BASE</h1>
+          <p className="page-subtitle">Accessing archived technical documentation...</p>
 
-        <div style={{ marginBottom: "2rem", width: "100%" }}>
-          {posts.map((post, index) => (
-            <div 
-              key={index} 
-              className="project-card ai"
-              style={{ 
-                opacity: 1,
-                display: "block",
-                visibility: "visible",
-                width: "100%",
-                maxWidth: "100%",
-                height: "auto",
-                overflow: "visible"
-              }}
-            >
-              <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "1rem" }}>
-                <Calendar size={12} className="text-electric-blue" />
-                <span className="timeline-date">{post.date}</span>
+          <div style={{ marginBottom: "2rem", width: "100%" }}>
+            {posts.map((post, index) => (
+              <div 
+                key={index} 
+                className="project-card ai"
+                style={{ 
+                  opacity: 1,
+                  display: "block",
+                  visibility: "visible",
+                  width: "100%",
+                  maxWidth: "100%",
+                  height: "auto",
+                  overflow: "visible"
+                }}
+              >
+                <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "1rem" }}>
+                  <Calendar size={12} className="text-electric-blue" />
+                  <span className="timeline-date">{post.date}</span>
+                </div>
+
+                <h2 className="project-title">{post.title}</h2>
+
+                <div className="project-tags">
+                  {post.tags.map((tag, tagIndex) => (
+                    <span key={tagIndex} className="project-tag">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+
+                <div className="project-description">{post.excerpt}</div>
+
+                {/* <div className="project-buttons">
+                  <button className="project-button" onClick={() => playSound("click")}>
+                    <ArrowRight size={12} />
+                    READ POST
+                  </button>
+                </div> */}
               </div>
+            ))}
+          </div>
 
-              <h2 className="project-title">{post.title}</h2>
+          {/* Photo Gallery Section */}
+          <div className="timeline-section" style={{ marginTop: "3rem" }}>
+            <h2 className="section-title">PHOTO GALLERY</h2>
+            <GridMotion
+              items={[
+                "/images/IMG_0034.JPG",
+                "/images/IMG_2824.jpg",
+                "/images/IMG_5372.JPG",
+                "/images/IMG_7777.jpg",
+                "/images/IMG_7805.jpg",
+                "/images/IMG_9773.jpg",
+                "/images/IMG_5617 2.jpg",
+                "/images/IMG_5650.jpg",
+                "/images/1759328884863 2.jpg",
+                "/images/0b23b2f0-0ee0-4583-b012-7de67457a5b0.JPG",
+                "/images/a5eeae23-1481-4944-a166-fc0bee3f1842 2.JPG",
+                "/images/cb39a926-f0d4-4ea0-8457-c4097ee1ee28.JPG",
+                "/images/IMG_5237 2.JPG",
+                "/images/IMG_4320 2.jpg",
+                "/images/IMG_5348 2.jpg",
+                "/images/IMG_5361.jpg",
+                "/images/IMG_5232.jpg",
+                "/images/IMG_4809.jpg",
+                "/images/IMG_5392.jpg",
+                "/images/IMG_2183.jpg",
+                "/images/IMG_5169.jpg",
+                "/images/IMG_7688.jpg",
+                "/images/IMG_5175.jpg",
+              ]}
+            />
+          </div>
 
-              <div className="project-tags">
-                {post.tags.map((tag, tagIndex) => (
-                  <span key={tagIndex} className="project-tag">
-                    {tag}
-                  </span>
-                ))}
-              </div>
-
-              <div className="project-description">{post.excerpt}</div>
-
-              {/* <div className="project-buttons">
-                <button className="project-button" onClick={() => playSound("click")}>
-                  <ArrowRight size={12} />
-                  READ POST
-                </button>
-              </div> */}
-            </div>
-          ))}
         </div>
-
-        {/* Photo Gallery Section */}
-        <div className="timeline-section" style={{ marginTop: "3rem" }}>
-          <h2 className="section-title">PHOTO GALLERY</h2>
-          <GridMotion
-            items={[
-              "/images/IMG_0034.JPG",
-              "/images/IMG_2824.jpg",
-              "/images/IMG_5372.JPG",
-              "/images/IMG_7777.jpg",
-              "/images/IMG_7805.jpg",
-              "/images/IMG_9773.jpg",
-              "/images/IMG_5617 2.jpg",
-              "/images/IMG_5650.jpg",
-              "/images/1759328884863 2.jpg",
-              "/images/0b23b2f0-0ee0-4583-b012-7de67457a5b0.JPG",
-              "/images/a5eeae23-1481-4944-a166-fc0bee3f1842 2.JPG",
-              "/images/cb39a926-f0d4-4ea0-8457-c4097ee1ee28.JPG",
-              "/images/IMG_5237 2.JPG",
-              "/images/IMG_4320 2.jpg",
-              "/images/IMG_5348 2.jpg",
-              "/images/IMG_5361.jpg",
-              "/images/IMG_5232.jpg",
-              "/images/IMG_4809.jpg",
-              "/images/IMG_5392.jpg",
-              "/images/IMG_2183.jpg",
-              "/images/IMG_5169.jpg",
-              "/images/IMG_7688.jpg",
-              "/images/IMG_5175.jpg",
-            ]}
-          />
-        </div>
-
       </div>
 
       <FloatingNav />

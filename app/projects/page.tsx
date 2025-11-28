@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { Github, ExternalLink } from "lucide-react"
 import FloatingNav from "@/components/floating-nav"
 import ProjectChatbot from "@/components/project-chatbot"
@@ -27,16 +27,12 @@ interface Project {
 }
 
 export default function ProjectsPage() {
-  const [projects, setProjects] = useState<Project[]>([])
-  const [loading, setLoading] = useState(true)
+
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
   const [showFavoriteOnly, setShowFavoriteOnly] = useState(false)
   const { playSound } = useSound()
 
-  useEffect(() => {
-    // Simulate loading
-    setTimeout(() => {
-      setProjects([
+  const projects: Project[] = [
         {
           id: 1,
           title: "🥈 OnTrack – Multi-Agent Study Planner",
@@ -358,11 +354,7 @@ export default function ProjectsPage() {
           date: "2025-10",
           isFavorite: true,
         }
-      ])
-      setLoading(false)
-      playSound("success")
-    }, 1000)
-  }, [playSound])
+  ]
 
   const handleCategoryClick = (category: string | null) => {
     playSound("click")
@@ -399,11 +391,12 @@ export default function ProjectsPage() {
 
   return (
     <>
-      <div className="page-container projects-page-with-chatbot">
-        <h1 className="page-title blinking-cursor">PROJECT DATABASE</h1>
-        <p className="page-subtitle">Access granted to classified archives.</p>
+      <div className="monitor-scroll-area">
+        <div className="page-container projects-page-with-chatbot">
+          <h1 className="page-title blinking-cursor">PROJECT DATABASE</h1>
+          <p className="page-subtitle">Access granted to classified archives.</p>
 
-        <div className="category-tabs">
+          <div className="category-tabs">
           <button
             className={`category-tab ${selectedCategory === null && !showFavoriteOnly ? "active" : ""}`}
             onClick={() => handleCategoryClick(null)}
@@ -442,22 +435,6 @@ export default function ProjectsPage() {
           </button>
         </div>
 
-        {loading ? (
-          <div className="text-center">
-            <p className="text-terminal-green mb-4">LOADING PROJECT DATA...</p>
-            <div className="audio-visualizer">
-              {Array.from({ length: 32 }).map((_, i) => (
-                <div
-                  key={i}
-                  className="visualizer-bar"
-                  style={{
-                    animationDelay: `${i * 0.05}s`,
-                  }}
-                />
-              ))}
-            </div>
-          </div>
-        ) : (
           <div className="projects-grid">
             {filteredProjects.map((project) => {
               const pages = [
@@ -584,7 +561,7 @@ export default function ProjectsPage() {
               );
             })}
           </div>
-        )}
+      </div>
       </div>
 
       <ProjectChatbot />
@@ -593,14 +570,14 @@ export default function ProjectsPage() {
          className="spline-container"
          style={{
            position: 'fixed',
-           bottom: '0vh',
-           left: '0vw',
+           bottom: '50vh',
+           left: '65vw', /* Robot is at bottom-left of spline scene, so we start scene at 50% width */
            right: '0',
            width: '100vw',
            height: '90vh',
-           zIndex: 5,
+           zIndex: 1,
            overflow: 'visible',
-           pointerEvents: 'none',
+           pointerEvents: 'auto',
          }}
        >
          <div 
